@@ -1,103 +1,91 @@
 import { NextFunction, Request, Response } from "express";
 import sendResponse from "../../libs/responseHandler";
 import {
-  createUser,
-  getAllUsers,
-  getUserByEmail,
-  getUserById,
-  updateUserById,
-} from "./users.services";
+  createEmployee,
+  getAllEmployees,
+  getEmployeeById,
+  updateEmployeeById,
+} from "./employees.services";
 
-export const createUserHandler = async (
+export const createEmployeeHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const user = req.body;
-  const { email } = user;
+  const employee = req.body;
   try {
-    const userExist = await getUserByEmail(email);
-
-    if (userExist) {
-      return sendResponse(res, {
-        code: 409,
-        status: false,
-        message: "User already exists",
-      });
-    }
-
-    await createUser(user);
+    await createEmployee(employee);
 
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "User created successfully",
+      message: "Employee created successfully",
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const updateUserByIdHandler = async (
+export const updateEmployeeByIdHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
-  const user = req.body;
+  const employee = req.body;
   try {
-    const updatedUser = await updateUserById(id, user);
+    const updatedEmployee = await updateEmployeeById(id, employee);
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "User updated successfully",
-      data: updatedUser,
+      message: "Employee updated successfully",
+      data: updatedEmployee,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const getAllUsersHandler = async (
+export const getAllEmployeesHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const users = await getAllUsers();
+    const employees = await getAllEmployees();
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "Users fetched successfully",
-      data: users,
+      message: "Employees fetched successfully",
+      data: employees,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const getUserByIdHandler = async (
+export const getEmployeeByIdHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
   try {
-    const user = await getUserById(id);
+    const employee = await getEmployeeById(id);
 
-    if (!user) {
+    if (!employee) {
       return sendResponse(res, {
         code: 404,
         status: false,
-        message: "User not found",
+        message: "Employee not found",
       });
     }
 
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "User fetched successfully",
-      data: user,
+      message: "Employee fetched successfully",
+      data: employee,
     });
   } catch (error) {
     next(error);

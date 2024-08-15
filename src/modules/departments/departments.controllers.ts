@@ -1,89 +1,77 @@
 import { NextFunction, Request, Response } from "express";
 import sendResponse from "../../libs/responseHandler";
 import {
-  createUser,
-  getAllUsers,
-  getUserByEmail,
-  getUserById,
-  updateUserById,
-} from "./users.services";
+  createDepartment,
+  getAllDepartments,
+  getDepartmentById,
+  updateDepartmentById,
+} from "./departments.services";
 
-export const createUserHandler = async (
+export const createDepartmentHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const user = req.body;
-  const { email } = user;
+  const department = req.body;
   try {
-    const userExist = await getUserByEmail(email);
-
-    if (userExist) {
-      return sendResponse(res, {
-        code: 409,
-        status: false,
-        message: "User already exists",
-      });
-    }
-
-    await createUser(user);
+    await createDepartment(department);
 
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "User created successfully",
+      message: "Department created successfully",
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const updateUserByIdHandler = async (
+export const updateDepartmentByIdHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
-  const user = req.body;
+  const department = req.body;
   try {
-    const updatedUser = await updateUserById(id, user);
+    const updatedDepartment = await updateDepartmentById(id, department);
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "User updated successfully",
-      data: updatedUser,
+      message: "Department updated successfully",
+      data: updatedDepartment,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const getAllUsersHandler = async (
+export const getAllDepartmentsHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const users = await getAllUsers();
+    const departments = await getAllDepartments();
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "Users fetched successfully",
-      data: users,
+      message: "Departments fetched successfully",
+      data: departments,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const getUserByIdHandler = async (
+export const getDepartmentByIdHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
   try {
-    const user = await getUserById(id);
+    const user = await getDepartmentById(id);
 
     if (!user) {
       return sendResponse(res, {

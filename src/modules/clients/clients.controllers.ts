@@ -1,103 +1,91 @@
 import { NextFunction, Request, Response } from "express";
 import sendResponse from "../../libs/responseHandler";
 import {
-  createUser,
-  getAllUsers,
-  getUserByEmail,
-  getUserById,
-  updateUserById,
-} from "./users.services";
-
-export const createUserHandler = async (
+  createClient,
+  getAllClients,
+  getClientById,
+  updateClientById,
+} from "./clients.services";
+export const createClientHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const user = req.body;
-  const { email } = user;
+  const client = req.body;
   try {
-    const userExist = await getUserByEmail(email);
-
-    if (userExist) {
-      return sendResponse(res, {
-        code: 409,
-        status: false,
-        message: "User already exists",
-      });
-    }
-
-    await createUser(user);
+    await createClient(client);
 
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "User created successfully",
+      message: "Client created successfully",
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const updateUserByIdHandler = async (
+export const updateClientByIdHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
+  const client = req.body;
   const user = req.body;
   try {
-    const updatedUser = await updateUserById(id, user);
+    const updatedClient = await updateClientById(id, client);
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "User updated successfully",
-      data: updatedUser,
+      message: "Client updated successfully",
+      data: updatedClient,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const getAllUsersHandler = async (
+export const getAllClientsHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const users = await getAllUsers();
+    const clients = await getAllClients();
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "Users fetched successfully",
-      data: users,
+      message: "Clients fetched successfully",
+      data: clients,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const getUserByIdHandler = async (
+export const getClientByIdHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
   try {
-    const user = await getUserById(id);
+    const client = await getClientById(id);
 
-    if (!user) {
+    if (!client) {
       return sendResponse(res, {
         code: 404,
         status: false,
-        message: "User not found",
+        message: "Client not found",
       });
     }
 
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "User fetched successfully",
-      data: user,
+      message: "Client fetched successfully",
+      data: client,
     });
   } catch (error) {
     next(error);

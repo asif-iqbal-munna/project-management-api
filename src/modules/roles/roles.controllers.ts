@@ -1,32 +1,20 @@
 import { NextFunction, Request, Response } from "express";
 import sendResponse from "../../libs/responseHandler";
 import {
-  createUser,
-  getAllUsers,
-  getUserByEmail,
-  getUserById,
-  updateUserById,
-} from "./users.services";
+  createRole,
+  getAllRoles,
+  getRoleById,
+  updateRoleById,
+} from "./roles.services";
 
-export const createUserHandler = async (
+export const createRoleHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const user = req.body;
-  const { email } = user;
+  const role = req.body;
   try {
-    const userExist = await getUserByEmail(email);
-
-    if (userExist) {
-      return sendResponse(res, {
-        code: 409,
-        status: false,
-        message: "User already exists",
-      });
-    }
-
-    await createUser(user);
+    await createRole(role);
 
     return sendResponse(res, {
       code: 200,
@@ -38,66 +26,66 @@ export const createUserHandler = async (
   }
 };
 
-export const updateUserByIdHandler = async (
+export const updateRoleByIdHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
-  const user = req.body;
+  const role = req.body;
   try {
-    const updatedUser = await updateUserById(id, user);
+    const updatedRole = await updateRoleById(id, role);
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "User updated successfully",
-      data: updatedUser,
+      message: "Role updated successfully",
+      data: updatedRole,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const getAllUsersHandler = async (
+export const getAllRolesHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const users = await getAllUsers();
+    const roles = await getAllRoles();
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "Users fetched successfully",
-      data: users,
+      message: "Roles fetched successfully",
+      data: roles,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const getUserByIdHandler = async (
+export const getRoleByIdHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
   try {
-    const user = await getUserById(id);
+    const role = await getRoleById(id);
 
-    if (!user) {
+    if (!role) {
       return sendResponse(res, {
         code: 404,
         status: false,
-        message: "User not found",
+        message: "Role not found",
       });
     }
 
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "User fetched successfully",
-      data: user,
+      message: "Role fetched successfully",
+      data: role,
     });
   } catch (error) {
     next(error);
