@@ -1,16 +1,28 @@
+import mongoose from "mongoose";
 import User from "./users.model";
-import { IUser } from "./users.types";
+import { IUser, IUserMethods } from "./users.types";
 
-export const createUser = (user: IUser) => {
-  return User.create(user);
+export const createUser = (
+  user: IUser,
+  session?: mongoose.mongo.ClientSession
+) => {
+  return User.create(user, { session });
 };
 
 export const getUserById = (id: string) => {
-  return User.findById(id);
+  return User.findById(id)
+    .populate([
+      { path: "role", select: "name" },
+      { path: "department", select: "name" },
+    ])
+    .lean();
 };
 
 export const getUserByEmail = (email: string) => {
-  return User.findOne({ email });
+  return User.findOne({ email }).populate([
+    { path: "role", select: "name" },
+    { path: "department", select: "name" },
+  ]);
 };
 
 export const getAllUsers = () => {

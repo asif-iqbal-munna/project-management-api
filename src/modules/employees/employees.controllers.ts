@@ -6,6 +6,7 @@ import {
   getEmployeeById,
   updateEmployeeById,
 } from "./employees.services";
+import mongoose from "mongoose";
 
 export const createEmployeeHandler = async (
   req: Request,
@@ -14,14 +15,20 @@ export const createEmployeeHandler = async (
 ) => {
   const employee = req.body;
   try {
-    await createEmployee(employee);
+    const session = await mongoose.startSession();
+    await session.withTransaction(async () => {
+      await createEmployee(employee, session);
 
-    return sendResponse(res, {
-      code: 200,
-      status: true,
-      message: "Employee created successfully",
+      return sendResponse(res, {
+        code: 200,
+        status: true,
+        message: "Employee created successfully",
+      });
     });
+    session.endSession();
   } catch (error) {
+    console.log(error);
+
     next(error);
   }
 };

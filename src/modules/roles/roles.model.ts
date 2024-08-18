@@ -6,6 +6,8 @@ const roleSchema = new mongoose.Schema<IRole>(
     name: {
       type: String,
       trim: true,
+      required: true,
+      lowercase: true,
     },
     description: {
       type: String,

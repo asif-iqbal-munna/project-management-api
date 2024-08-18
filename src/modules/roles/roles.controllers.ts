@@ -19,7 +19,7 @@ export const createRoleHandler = async (
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "User created successfully",
+      message: "Role created successfully",
     });
   } catch (error) {
     next(error);

@@ -5,13 +5,13 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  clientId?: ObjectId;
-  employeeId?: ObjectId;
-  type: "client" | "employee";
-  status: boolean;
+  type: "client" | "employee" | "both";
+  status?: boolean;
   image?: string;
-  role: {
-    _id: ObjectId;
-    name: string;
-  };
+  role: ObjectId;
+  department: ObjectId;
+}
+
+export interface IUserMethods {
+  validatePassword(candidatePassword: string): Promise<boolean>;
 }

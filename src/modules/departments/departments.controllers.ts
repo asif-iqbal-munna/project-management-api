@@ -71,21 +71,21 @@ export const getDepartmentByIdHandler = async (
 ) => {
   const { id } = req.params;
   try {
-    const user = await getDepartmentById(id);
+    const department = await getDepartmentById(id);
 
-    if (!user) {
+    if (!department) {
       return sendResponse(res, {
         code: 404,
         status: false,
-        message: "User not found",
+        message: "Department not found",
       });
     }
 
     return sendResponse(res, {
       code: 200,
       status: true,
-      message: "User fetched successfully",
-      data: user,
+      message: "Department fetched successfully",
+      data: department,
     });
   } catch (error) {
     next(error);

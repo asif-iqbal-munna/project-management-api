@@ -1,7 +1,8 @@
-import mongoose from "mongoose";
-import { IUser } from "./users.types";
-
-const userSchema = new mongoose.Schema<IUser>(
+import mongoose, { Model, Types, model } from "mongoose";
+import { IUser, IUserMethods } from "./users.types";
+import { hashedPassword, comparePassword } from "../../libs/securePassword";
+type UserModel = Model<IUser, {}, IUserMethods>;
+const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>(
   {
     name: {
       type: String,
@@ -19,18 +20,18 @@ const userSchema = new mongoose.Schema<IUser>(
       required: true,
     },
     role: {
-      _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Role",
-        required: true,
-      },
-      name: { type: String, required: true },
+      type: Types.ObjectId,
+      ref: "Role",
+      required: true,
     },
-    clientId: { type: mongoose.Schema.Types.ObjectId, ref: "Client" },
-    employeeId: { type: mongoose.Schema.Types.ObjectId, ref: "Employee" },
+    department: {
+      type: Types.ObjectId,
+      ref: "Department",
+      required: true,
+    },
     type: {
       type: String,
-      enum: ["client", "employee"],
+      enum: ["client", "employee", "both", "admin"],
       required: true,
     },
     status: {
@@ -42,5 +43,21 @@ const userSchema = new mongoose.Schema<IUser>(
   }
 );
 
-const User = mongoose.model<IUser>("User", userSchema);
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    this.password = (await hashedPassword(this.password)) as string;
+  }
+  next();
+});
+
+userSchema.method(
+  "validatePassword",
+  function validatePassword(candidatePassword: string) {
+    const user = this;
+    return comparePassword(candidatePassword, user.password);
+  }
+);
+
+const User = model<IUser, UserModel>("User", userSchema);
+
 export default User;

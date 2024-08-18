@@ -6,7 +6,6 @@ export interface IEmployee {
   phone: string;
   userId: ObjectId;
   projectId?: ObjectId[];
-  department: ObjectId;
   employeeId: string;
   dob?: string;
   doc?: {
@@ -25,7 +24,7 @@ export interface IEmployee {
     role: string;
   };
   agreement?: {
-    type: ["contract", "leave", "probation", "promotion"];
+    type: ["contract", "leave", "probation", "promotion", "permanent"];
     deed: string[];
     startsFrom: string;
     endsAt: string;

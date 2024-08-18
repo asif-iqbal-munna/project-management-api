@@ -32,7 +32,6 @@ export const updateClientByIdHandler = async (
 ) => {
   const { id } = req.params;
   const client = req.body;
-  const user = req.body;
   try {
     const updatedClient = await updateClientById(id, client);
     return sendResponse(res, {

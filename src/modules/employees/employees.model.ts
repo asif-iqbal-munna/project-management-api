@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { IEmployee } from "./employees.types";
 
-export const employeeSchema = new mongoose.Schema(
+export const employeeSchema = new mongoose.Schema<IEmployee>(
   {
     name: {
       type: String,
@@ -18,11 +18,6 @@ export const employeeSchema = new mongoose.Schema(
       required: true,
     },
     projectId: [{ type: mongoose.Schema.Types.ObjectId, ref: "Project" }],
-    department: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Department",
-      required: true,
-    },
     employeeId: {
       type: String,
       required: true,
@@ -52,7 +47,7 @@ export const employeeSchema = new mongoose.Schema(
     agreement: {
       type: {
         type: String,
-        enum: ["contract", "leave", "probation", "promotion"],
+        enum: ["contract", "leave", "probation", "promotion", "permanent"],
         required: true,
       },
       deed: [String],
