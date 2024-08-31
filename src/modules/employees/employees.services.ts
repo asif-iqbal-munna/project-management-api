@@ -25,8 +25,6 @@ export const createEmployee = async (
     { session }
   );
 
-  console.log(newUser);
-
   const newEmployee = await Employee.create(
     [
       {
@@ -38,8 +36,6 @@ export const createEmployee = async (
     ],
     { session }
   );
-
-  console.log(newEmployee);
 
   return newEmployee;
 };

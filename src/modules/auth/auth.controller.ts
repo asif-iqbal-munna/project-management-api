@@ -10,8 +10,6 @@ export const signInHandler = async (
   next: NextFunction
 ) => {
   try {
-    console.log("there XXXXXXXXXXXXX");
-
     const { email, password } = req.body;
     const user = await getUserByEmail(email);
 

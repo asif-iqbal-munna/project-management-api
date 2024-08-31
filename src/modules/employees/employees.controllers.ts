@@ -7,6 +7,7 @@ import {
   updateEmployeeById,
 } from "./employees.services";
 import mongoose from "mongoose";
+import { sendMail } from "../../email/emailConfig";
 
 export const createEmployeeHandler = async (
   req: Request,
@@ -18,7 +19,9 @@ export const createEmployeeHandler = async (
     const session = await mongoose.startSession();
     await session.withTransaction(async () => {
       await createEmployee(employee, session);
-
+      sendMail(employee.email, "Welcome you onboarding", "welcome-employees", {
+        userName: "Asif Iqbal Munna",
+      });
       return sendResponse(res, {
         code: 200,
         status: true,
@@ -28,7 +31,6 @@ export const createEmployeeHandler = async (
     session.endSession();
   } catch (error) {
     console.log(error);
-
     next(error);
   }
 };
