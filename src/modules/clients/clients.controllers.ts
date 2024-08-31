@@ -6,6 +6,7 @@ import {
   getClientById,
   updateClientById,
 } from "./clients.services";
+import { IRequest } from "../../libs/types";
 export const createClientHandler = async (
   req: Request,
   res: Response,
@@ -46,7 +47,7 @@ export const updateClientByIdHandler = async (
 };
 
 export const getAllClientsHandler = async (
-  req: Request,
+  req: IRequest,
   res: Response,
   next: NextFunction
 ) => {

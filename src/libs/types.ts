@@ -1,3 +1,6 @@
+import { Request } from "express";
+import { IUser } from "../modules/users/users.types";
+
 export type ApiResponse<T> = {
   code: number;
   status: boolean;
@@ -6,3 +9,7 @@ export type ApiResponse<T> = {
   data?: T;
   stack?: string;
 };
+
+export interface IRequest extends Request {
+  user?: IUser;
+}
